@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>Seq.Input.HealthCheck</id>
+    <version>2.0.0</version>
+    <authors>Datalust and Contributors</authors>
+    <license type="file">LICENSE</license>
+    <licenseUrl>https://aka.ms/deprecateLicenseUrl</licenseUrl>
+    <icon>seq-input-healthcheck.png</icon>
+    <projectUrl>https://github.com/datalust/seq-input-healthcheck</projectUrl>
+    <description>Seq Health Check: periodically GET an HTTP resource and publish response metrics to Seq.</description>
+    <tags>seq-app</tags>
+    <repository type="git" url="https://github.com/datalust/seq-input-healthcheck" />
+    <dependencies>
+      <group targetFramework="net5.0">
+        <dependency id="Microsoft.AspNetCore.WebUtilities" version="2.2.0" exclude="Build,Analyzers" />
+        <dependency id="Seq.Apps" version="2021.4.0" exclude="Build,Analyzers" />
+        <dependency id="Serilog" version="2.10.0" exclude="Build,Analyzers" />
+        <dependency id="Serilog.Expressions" version="3.3.0" exclude="Build,Analyzers" />
+        <dependency id="Serilog.Formatting.Compact.Reader" version="1.0.5" exclude="Build,Analyzers" />
+        <dependency id="newtonsoft.json" version="13.0.1" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>

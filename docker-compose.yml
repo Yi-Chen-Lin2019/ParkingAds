@@ -1,0 +1,67 @@
+version: "3.9"
+services:
+  rabbitMQServer:
+    # NOTE: requires external setup from /root/dockerWorld
+    container_name: rabbitMQ
+    image: rabbitmq:3.10-management
+    restart: always
+    networks:
+        - parkingAds_net
+    ports:
+        #- "16201:5672"
+        #- "16202:15672" # http interface
+        - 5672:5672 
+        - 15672:15672
+    environment:
+        RABBITMQ_DEFAULT_USER: "guest"
+        RABBITMQ_DEFAULT_PASS: "guest"
+    depends_on:
+      - seq
+
+  seq:
+    # SeQ is a framework for logging of exceptions etc
+    container_name: ParkingAds.SeQ
+    image: datalust/seq:latest
+    restart: unless-stopped
+    ports:
+      - 80:80
+      - 5341:5341
+    environment:
+      - ACCEPT_EULA=Y
+    networks:
+        - parkingAds_net
+    volumes:
+      - ./seq-data:/data
+
+  smtp4dev:
+    # development time email server and client, easy to test sending emails
+    container_name: ParkingAds.Smtp4dev
+    image: rnwood/smtp4dev:latest
+    ports:
+      - 8082:80
+      - 26:25
+    networks:
+        - parkingAds_net
+
+  parkingservice:
+    container_name: ParkingAds.ParkingService
+    image: kidskids5817/psuparkingservice
+    restart: unless-stopped
+    ports:
+      - 8083:80
+    networks:
+        - parkingAds_net
+
+  adservice:
+    container_name: ParkingAds.AdService
+    image: kidskids5817/psuadservice
+    restart: unless-stopped
+    ports:
+      - 8084:80
+    networks:
+        - parkingAds_net
+networks:
+    parkingAds_net:
+
+
+
