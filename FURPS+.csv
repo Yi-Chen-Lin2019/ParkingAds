@@ -1,0 +1,80 @@
+Requirements,Questions,Impact,Answers,Priority
+"Functionality
+Mail
+Reporting
+
+
+
+
+Usability
+Accessibility
+","How should the ParkingAds work like?
+How should the end-user interact with the system?
+What functionalities do you want in the system?
+What king of information do you want to show on the system?
+Are there any particular requirements about the ease with which the system can be exercised?
+How should we measure the accessibility of the application?
+","The greater the sophistication the functionalities, the longer time to market, and the greater long-term maintenance cost.
+
+The greater the accessibility, the longer the time to market, and the greater the long-term maintenance cost.","The system should be able to:
+locate the nearest free parking lot and
+easily get an overview of how many parking spaces are available
+Show advertisements or references to local hotels, museums, attractions or something similar
+Get receipt per mail and on the client when a booking has been successfully created
+Achieve profitability by 2021 followed by 20% increase in revenues per annum
+No special requirements for the accessibility, but a monitoring metrics proposed: completion rate
+It would be great if information (based on the user’s location) is displayed within the email that they receive back from ParkingAds or alternatively they receive notifications about other services (hotel, restaurants, etc).
+be a responsive (provide feedback) application where the user can easily access it from their mobile device or from a desktop computer. 
+",High
+"Functionality
+
+",What kind of functionalities do you expect to have in the future?,"The greater the sophistication the functionalities, the longer time to market, and the greater long-term maintenance cost.","Book and reserve a parking lot in advance.
+",Low
+"Reliability
+Availability","Are there any requirements for system up time? mean time between failures?
+","The higher the availability, the longer time to market.","The ParkingAds should always respond, even if any of the services behind fails. 
+If the complete system fails the user should still receive a response.
+Up time should be monitored and measured.",Medium
+"Performance
+Throughput","Are there any special requirements regarding throughput of data supported by the system?
+","The greater throughput of data, the longer time to market.",The initial version of the ParkingAds application should be able to handle at least 1000 requests per minute.,High
+"Performance
+Response time","Are there any constraints on the time the system takes to respond to the particular events?
+","The shorter response time, the longer time to market.",The end-user should wait no longer than 2 seconds to get a response to avoid lost advertisement revenue.,High
+"Supportability
+
+Localizability
+Scalability
+
+Functionality
+Localization
+
+Design requirement","Does the system need to support multiple languages?
+Which languages need to be supported?
+Are there any constraints on the mechanism used to provide localization capability?","The greater the sophistication of the localization mechanism, the longer time to market, and the greater the long-term maintenance cost.","ParkingAds expect to expand across EU by the year 2025, thus we need to implement English, German, French, Italian, Spanish…according to the 2012 survey. https://en.wikipedia.org/wiki/Languages_of_the_European_Union",Low
+"Supportability
+
+Configurability","Will the system be configured after it has been deployed?
+In what way will the system be configured?
+","The greater the configurability of the system, the longer time to market, and the greater the long-term maintenance cost.",Eventually it should be possible for external partners to plug their service into the system and show location specific content.,Low
+"Design requirements
+
+
+Implementation requirements
+
+Third-party components","Are there any constraints on the sue of third-part components?
+
+Are there any approved relevant alliances with third-party vendors?","The more third party components used, the shorter time to market. The system would be more maintainable since the components are effectively sub contracted.
+","Investor’s self-developed advertising service:
+always show the most recent advertisements from the advertising service
+only query the advertisement service once every 2 minutes
+advertisements from the advertisement service should be a part of the booking receipt",High
+"Implementation requirements
+
+Platform support 
+
+","What platforms must the system support?
+Which OS versions must be supported?
+If web access required, which web browsers and versions must be supported?
+Will the system be ported to new platforms in the future?
+","Single-platform-development needs a shorter time to market. While multiple-platform-development needs a longer time to market, future development on the new platforms would be much quicker.","Multiple-platform development, as the system should support both mobile and desktop clients.",Medium
