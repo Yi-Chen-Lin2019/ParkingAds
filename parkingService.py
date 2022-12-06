@@ -26,7 +26,7 @@ def on_request(ch, method, props, body):
     response = getAvailableLots(location)
 
     ch.basic_publish(exchange='topic_find_parking',
-                     routing_key='response',
+                     routing_key='response.parking',
                      properties=pika.BasicProperties(correlation_id = \
                                                          props.correlation_id),
                      body=str(response))
