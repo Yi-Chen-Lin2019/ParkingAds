@@ -1,16 +1,17 @@
 import geocoder
 import pika
 import uuid
+import sys
 
 class ParkingAdsClient():
 
-    def __init__(self):
+    def __init__(self, input_location: None):
         """
-        Get location from user's ip address
-        Assign message variable to location json value
+        Get location from user's ip address and
+        assign message variable with location
         """
         location = geocoder.ip('me')
-        self.message = location.city
+        self.message = location.json["city"] if input_location is None else input_location
         """
         Publish find parking lots with location request to messaging system.
         """
@@ -24,11 +25,10 @@ class ParkingAdsClient():
         self.callback_queue = result.method.queue
         print('call back queue: ', self.callback_queue)
 
-        #binding_keys = "response.#"
         self.channel.queue_bind(
             exchange='topic_find_parking', 
-            queue=self.callback_queue, 
-            #routing_key=binding_keys
+            queue=self.callback_queue,
+            routing_key='{}.*'.format(self.callback_queue)
             )
 
         self.channel.basic_consume(
@@ -55,8 +55,8 @@ class ParkingAdsClient():
             body=self.message)
         self.connection.process_data_events(time_limit=None)
 
-
-parkme = ParkingAdsClient()
+some_location = sys.argv[1]
+parkme = ParkingAdsClient(input_location=some_location)
 
 print(" [x] Requesting parking information")
 parkme.call()
