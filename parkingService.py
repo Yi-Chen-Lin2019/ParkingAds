@@ -18,8 +18,10 @@ def on_request(ch, method, props, body):
     print('parking service on request, location: ',location)
     response = getAvailableLots(location)
 
+    print('reply to: ', props.reply_to)
+
     ch.basic_publish(exchange='topic_find_parking',
-                     routing_key='response.parking',
+                     routing_key=props.reply_to,
                      properties=pika.BasicProperties(correlation_id = \
                                                          props.correlation_id),
                      body=str(response))

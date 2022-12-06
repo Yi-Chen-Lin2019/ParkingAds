@@ -20,11 +20,16 @@ class ParkingAdsClient():
         self.channel = self.connection.channel()
         self.channel.exchange_declare(exchange='topic_find_parking', exchange_type='topic')
 
-        result = self.channel.queue_declare(queue='UI', exclusive=True)
+        result = self.channel.queue_declare(queue='', exclusive=True)
         self.callback_queue = result.method.queue
+        print('call back queue: ', self.callback_queue)
 
-        binding_keys = "response.#"
-        self.channel.queue_bind(exchange='topic_find_parking', queue=self.callback_queue, routing_key=binding_keys)
+        #binding_keys = "response.#"
+        self.channel.queue_bind(
+            exchange='topic_find_parking', 
+            queue=self.callback_queue, 
+            #routing_key=binding_keys
+            )
 
         self.channel.basic_consume(
             queue=self.callback_queue,
@@ -39,13 +44,13 @@ class ParkingAdsClient():
             print('wrong corrid')
     def call(self):
         self.corr_id = str(uuid.uuid4())
-
         self.channel.basic_publish(
             exchange='topic_find_parking',
             routing_key='find.parking',
             properties=pika.BasicProperties(
                 reply_to=self.callback_queue,
                 correlation_id=self.corr_id,
+                #delivery_mode = pika.spec.PERSISTENT_DELIVERY_MODE # make sure message persistent, won't lost
             ),
             body=self.message)
         self.connection.process_data_events(time_limit=None)
