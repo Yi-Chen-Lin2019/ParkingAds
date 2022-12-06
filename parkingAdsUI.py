@@ -23,7 +23,7 @@ class ParkingAdsClient():
         result = self.channel.queue_declare(queue='UI', exclusive=True)
         self.callback_queue = result.method.queue
 
-        binding_keys = "response"
+        binding_keys = "response.#"
         self.channel.queue_bind(exchange='topic_find_parking', queue=self.callback_queue, routing_key=binding_keys)
 
         self.channel.basic_consume(
