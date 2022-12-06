@@ -30,16 +30,14 @@ class ParkingAdsClient():
             queue=self.callback_queue,
             on_message_callback=self.on_response)
 
-        self.response = None
         self.corr_id = None
 
     def on_response(self, ch, method, props, body):
         if self.corr_id == props.correlation_id:
-            self.response = body
+            print(body)
         else:
             print('wrong corrid')
     def call(self):
-        self.response = None
         self.corr_id = str(uuid.uuid4())
 
         self.channel.basic_publish(
@@ -51,11 +49,9 @@ class ParkingAdsClient():
             ),
             body=self.message)
         self.connection.process_data_events(time_limit=None)
-        return str(self.response)
 
 
 parkme = ParkingAdsClient()
 
 print(" [x] Requesting parking information")
-response = parkme.call()
-print(" [.] Got %r" % response)
+parkme.call()

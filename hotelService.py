@@ -23,7 +23,6 @@ def getAvailable(location):
 def on_request(ch, method, props, body):
     location = body
     print('hotel service on request, location: ',location)
-    
     response = getAvailable(location)
 
     ch.basic_publish(exchange='topic_find_parking',
