@@ -1,15 +1,12 @@
 version: "3.9"
 services:
   rabbitMQServer:
-    # NOTE: requires external setup from /root/dockerWorld
     container_name: rabbitMQ
     image: rabbitmq:3.10-management
     restart: always
     networks:
         - parkingAds_net
     ports:
-        #- "16201:5672"
-        #- "16202:15672" # http interface
         - 5672:5672 
         - 15672:15672
     environment:
@@ -58,6 +55,15 @@ services:
     restart: unless-stopped
     ports:
       - 8084:80
+    networks:
+        - parkingAds_net
+
+  proxy:
+    build: proxy
+    ports:
+      - 83:80
+    depends_on: 
+      - adservice
     networks:
         - parkingAds_net
 networks:
