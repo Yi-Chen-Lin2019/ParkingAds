@@ -9,7 +9,7 @@ channel = connection.channel()
 def getAvailable(location):
     response = '''
     Greetings, welcome to {}
-    More hotels content comming...
+    More hotels content are comming...
     '''.format(location)
     return response
 

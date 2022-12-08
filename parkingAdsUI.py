@@ -2,6 +2,8 @@ import geocoder
 import pika
 import uuid
 import sys
+import requests
+from bs4 import BeautifulSoup
 
 class ParkingAdsClient():
 
@@ -13,13 +15,13 @@ class ParkingAdsClient():
         location = geocoder.ip('me')
         self.message = location.json["city"] if input_location is None else input_location
         """
-        Publish find parking lots with location request to messaging system.
+        Send find parking lots request with location to messaging system.
         """
         self.connection = pika.BlockingConnection(
             pika.ConnectionParameters(host='localhost'))
 
         self.channel = self.connection.channel()
-        self.channel.exchange_declare(exchange='topic_find_parking', exchange_type='topic')
+        #self.channel.exchange_declare(exchange='topic_find_parking', exchange_type='topic')
 
         result = self.channel.queue_declare(queue='', exclusive=True)
         self.callback_queue = result.method.queue
@@ -36,6 +38,11 @@ class ParkingAdsClient():
             on_message_callback=self.on_response)
 
         self.corr_id = None
+
+        # show ad
+        page = requests.get('http://localhost:83').text
+        soup = BeautifulSoup(page, "html.parser")
+        print(soup)
 
     def on_response(self, ch, method, props, body):
         if self.corr_id == props.correlation_id:

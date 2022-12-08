@@ -9,7 +9,7 @@ channel = connection.channel()
 def getAvailableLots(location):
     response = '''
     Hi, welcome to {}
-    More content comming...
+    Here are the nearest parking lots:
     ''' .format(location)
     return response
 
