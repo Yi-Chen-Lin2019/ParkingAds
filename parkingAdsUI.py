@@ -40,9 +40,14 @@ class ParkingAdsClient():
         self.corr_id = None
 
         # show ad
-        page = requests.get('http://localhost:83').text
-        soup = BeautifulSoup(page, "html.parser")
-        print(soup)
+        try:
+            page = requests.get('http://localhost:83').text
+            soup = BeautifulSoup(page, "html.parser")
+            ad_text = [t.get_text() for t in soup.find_all("div")]
+            print('Ad: ', ad_text[0])
+        except:
+            print('some ads')
+        
 
     def on_response(self, ch, method, props, body):
         if self.corr_id == props.correlation_id:
@@ -65,5 +70,5 @@ class ParkingAdsClient():
 some_location = sys.argv[1]
 parkme = ParkingAdsClient(input_location=some_location)
 
-print(" [x] Requesting parking information")
+print(" [x] Requesting parking information...")
 parkme.call()
