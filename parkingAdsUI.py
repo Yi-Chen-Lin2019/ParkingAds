@@ -1,3 +1,4 @@
+from asyncio import sleep
 import geocoder
 import pika
 import uuid
@@ -39,7 +40,8 @@ class ParkingAdsClient():
 
         self.channel.basic_consume(
             queue=self.callback_queue,
-            on_message_callback=self.on_response)
+            on_message_callback=self.on_response,
+            auto_ack=True)
 
         self.corr_id = None
 
@@ -80,3 +82,4 @@ parkme = ParkingAdsClient(input_location=some_location)
 
 print(" [x] Requesting parking information...")
 parkme.call()
+parkme.channel.start_consuming()
