@@ -4,6 +4,10 @@ import uuid
 import sys
 import requests
 from bs4 import BeautifulSoup
+import json
+import seqlog
+from pygelf import GelfUdpHandler
+import logging
 
 class ParkingAdsClient():
 
@@ -47,6 +51,10 @@ class ParkingAdsClient():
             print('Ad: ', ad_text[0])
         except:
             print('some ads')
+            seqlog.log_to_seq(
+            server_url="http://localhost:5341/",
+            api_key="14X7q4Dngg8sBbKa72ZK",
+            level=logging.error("Cannot fetch ad from service"))
         
 
     def on_response(self, ch, method, props, body):
