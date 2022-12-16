@@ -1,20 +1,29 @@
 #!/usr/bin/env python
 import pika
+import requests
+from bs4 import BeautifulSoup
+import json
+import seqlog
+from pygelf import GelfUdpHandler
+import logging
 
 connection = pika.BlockingConnection(
     pika.ConnectionParameters(host='localhost'))
 
 channel = connection.channel()
-channel.exchange_declare(exchange='topic_find_parking', exchange_type='topic')
-
-result = channel.queue_declare(queue='ad', exclusive=True)
-queue_name = result.method.queue
-
-binding_keys = "find.#"
-channel.queue_bind(exchange='topic_find_parking', queue=queue_name, routing_key=binding_keys)
 
 def getAvailable():
-    response = "This is an ad"
+    response = 'some ads'
+    try:
+        page = requests.get('http://localhost:83').text
+        soup = BeautifulSoup(page, "html.parser")
+        ad_text = [t.get_text() for t in soup.find_all("div")]
+        response = 'Ad: '+ad_text[0]
+    except:
+        seqlog.log_to_seq(
+        server_url="http://localhost:5341/",
+        api_key="14X7q4Dngg8sBbKa72ZK",
+        level=logging.error("Cannot fetch ad from service"))
     return response
 
 def on_request(ch, method, props, body):
@@ -29,7 +38,7 @@ def on_request(ch, method, props, body):
     ch.basic_ack(delivery_tag=method.delivery_tag)
 
 channel.basic_qos(prefetch_count=1)
-channel.basic_consume(queue=queue_name, on_message_callback=on_request)
+channel.basic_consume(queue='ad', on_message_callback=on_request)
 
 print(" [x] Awaiting RPC requests")
 channel.start_consuming()
