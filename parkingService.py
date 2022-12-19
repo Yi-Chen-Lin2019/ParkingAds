@@ -6,7 +6,7 @@ connection = pika.BlockingConnection(
 
 channel = connection.channel()
 
-def getAvailableLots(location):
+def getAvailable(location):
     response = '''
     Hi, welcome to {}
     Here are the nearest parking lots:
@@ -16,7 +16,7 @@ def getAvailableLots(location):
 def on_request(ch, method, props, body):
     location = body
     print('parking service on request, location: ',location)
-    response = getAvailableLots(location)
+    response = getAvailable(location)
 
     print('reply to: ', props.reply_to)
 
