@@ -18,13 +18,10 @@ class ParkingAdsClient():
         """
         self.connection = pika.BlockingConnection(
             pika.ConnectionParameters(host='localhost'))
-
         self.channel = self.connection.channel()
-        #self.channel.exchange_declare(exchange='topic_find_parking', exchange_type='topic')
 
         result = self.channel.queue_declare(queue='', exclusive=True)
         self.callback_queue = result.method.queue
-        print('call back queue: ', self.callback_queue)
 
         self.channel.queue_bind(
             exchange='topic_find_parking', 
