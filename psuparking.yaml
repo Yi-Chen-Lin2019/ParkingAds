@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: psuparking
+  labels:
+    app: psuparking
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: psuparking
+  template:
+    metadata:
+      labels:
+        app: psuparking
+    spec:
+      containers:
+        - name: psuparking
+          image: kidskids5817/psuparkingservice
+          ports:
+          - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: psuparking-service
+spec:
+  selector:
+    app: psuparking
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      nodePort: 31800
