@@ -27,7 +27,7 @@ metadata:
 spec:
   selector:
     app: psuparking
-  type: NodePort
+  type: LoadBalancer
   ports:
     - protocol: TCP
       port: 80
