@@ -42,14 +42,14 @@ services:
   #   networks:
   #       - parkingAds_net
 
-  # parkingservice:
-  #   container_name: ParkingAds.ParkingService
-  #   image: kidskids5817/psuparkingservice
-  #   restart: unless-stopped
-  #   ports:
-  #     - 8083:80
-  #   networks:
-  #       - parkingAds_net
+  parkingservice:
+    container_name: ParkingAds.ParkingService
+    image: kidskids5817/psuparkingservice
+    restart: unless-stopped
+    ports:
+      - 8083:80
+    networks:
+        - parkingAds_net
 
   adservice:
     container_name: ParkingAds.AdService
@@ -61,7 +61,8 @@ services:
         - parkingAds_net
 
   proxy:
-    build: proxy
+    container_name: proxy
+    image: kidskids5817/adproxy:arm
     ports:
       - 83:80
     depends_on: 
@@ -70,7 +71,8 @@ services:
         - parkingAds_net
 
   console:
-    build: UI
+    container_name: ParkingAds.console
+    image: kidskids5817/parkingads-console:arm
     depends_on: 
       - rabbitMQServer
       - proxy
@@ -80,7 +82,8 @@ services:
       RABBITMQ_HOST: "rabbitMQ"
 
   parking:
-    build: parking
+    container_name: parking
+    image: kidskids5817/parkingservice:arm
     depends_on: 
       - rabbitMQServer
     networks:
@@ -89,7 +92,8 @@ services:
       RABBITMQ_HOST: "rabbitMQ"
 
   hotel:
-    build: hotel
+    container_name: hotel
+    image: kidskids5817/hotelservice:arm
     depends_on: 
       - rabbitMQServer
     networks:
@@ -100,7 +104,8 @@ services:
       AMADEUS_CLIENT_SECRET: "h4BFfroouLoPFac3"
 
   ad:
-    build: ad
+    container_name: ad
+    image: kidskids5817/adservice:arm
     depends_on: 
       - rabbitMQServer
     networks:
