@@ -3,21 +3,22 @@ import geocoder
 import pika
 import uuid
 import sys
+import os
 
 class ParkingAdsClient():
 
-    def __init__(self, input_location: None):
+    def __init__(self):
         """
         Get location from user's ip address and
         assign message variable with location
         """
         location = geocoder.ip('me')
-        self.message = location.json["city"] if input_location is None else input_location
+        self.message = location.json["city"]
         """
         Send find parking lots request with location to messaging system.
         """
         self.connection = pika.BlockingConnection(
-            pika.ConnectionParameters(host='localhost'))
+            pika.ConnectionParameters(host=os.environ["RABBITMQ_HOST"]))
         self.channel = self.connection.channel()
 
         result = self.channel.queue_declare(queue='', exclusive=True)
@@ -54,8 +55,7 @@ class ParkingAdsClient():
             body=self.message)
         self.connection.process_data_events(time_limit=None)
 
-some_location = sys.argv[1]
-parkme = ParkingAdsClient(input_location=some_location)
+parkme = ParkingAdsClient()
 
 print(" [x] Requesting parking information...")
 parkme.call()

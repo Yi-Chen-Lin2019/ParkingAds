@@ -14,6 +14,8 @@ services:
         RABBITMQ_DEFAULT_PASS: "guest"
     depends_on:
       - seq
+    volumes:
+      - ./rabbitmq:/data
 
   seq:
     # SeQ is a framework for logging of exceptions etc
@@ -66,6 +68,16 @@ services:
       - adservice
     networks:
         - parkingAds_net
+
+  console:
+    build: UI
+    depends_on: 
+      - rabbitMQServer
+      - proxy
+    networks:
+        - parkingAds_net
+    environment:
+      RABBITMQ_HOST: "rabbitMQ"
 networks:
     parkingAds_net:
 
