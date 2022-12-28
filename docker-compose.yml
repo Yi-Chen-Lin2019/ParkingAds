@@ -32,24 +32,24 @@ services:
     volumes:
       - ./seq-data:/data
 
-  smtp4dev:
-    # development time email server and client, easy to test sending emails
-    container_name: ParkingAds.Smtp4dev
-    image: rnwood/smtp4dev:latest
-    ports:
-      - 8082:80
-      - 26:25
-    networks:
-        - parkingAds_net
+  # smtp4dev:
+  #   # development time email server and client, easy to test sending emails
+  #   container_name: ParkingAds.Smtp4dev
+  #   image: rnwood/smtp4dev:latest
+  #   ports:
+  #     - 8082:80
+  #     - 26:25
+  #   networks:
+  #       - parkingAds_net
 
-  parkingservice:
-    container_name: ParkingAds.ParkingService
-    image: kidskids5817/psuparkingservice
-    restart: unless-stopped
-    ports:
-      - 8083:80
-    networks:
-        - parkingAds_net
+  # parkingservice:
+  #   container_name: ParkingAds.ParkingService
+  #   image: kidskids5817/psuparkingservice
+  #   restart: unless-stopped
+  #   ports:
+  #     - 8083:80
+  #   networks:
+  #       - parkingAds_net
 
   adservice:
     container_name: ParkingAds.AdService
@@ -78,6 +78,38 @@ services:
         - parkingAds_net
     environment:
       RABBITMQ_HOST: "rabbitMQ"
+
+  parking:
+    build: parking
+    depends_on: 
+      - rabbitMQServer
+    networks:
+        - parkingAds_net
+    environment:
+      RABBITMQ_HOST: "rabbitMQ"
+
+  hotel:
+    build: hotel
+    depends_on: 
+      - rabbitMQServer
+    networks:
+        - parkingAds_net
+    environment:
+      RABBITMQ_HOST: "rabbitMQ"
+      AMADEUS_CLINET_ID: "IGhg5sxWUxzQlck2GqHWkRgbc7aGA4RM"
+      AMADEUS_CLIENT_SECRET: "h4BFfroouLoPFac3"
+
+  ad:
+    build: ad
+    depends_on: 
+      - rabbitMQServer
+    networks:
+        - parkingAds_net
+    environment:
+      RABBITMQ_HOST: "rabbitMQ"
+      SEQ: "http://seq:80"
+      SEQ_API_KEY: "14X7q4Dngg8sBbKa72ZK"
+      ADSERVICE: "http://proxy:80"
 networks:
     parkingAds_net:
 

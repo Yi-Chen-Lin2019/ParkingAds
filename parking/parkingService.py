@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 import pika
+import os
 
 connection = pika.BlockingConnection(
-    pika.ConnectionParameters(host='localhost'))
+    pika.ConnectionParameters(host=os.environ["RABBITMQ_HOST"]))
 
 channel = connection.channel()
 

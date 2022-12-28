@@ -55,8 +55,19 @@ class ParkingAdsClient():
             body=self.message)
         self.connection.process_data_events(time_limit=None)
 
-parkme = ParkingAdsClient()
+def main():
+    parkme = ParkingAdsClient()
 
-print(" [x] Requesting parking information...")
-parkme.call()
-parkme.channel.start_consuming()
+    print(" [x] Requesting parking information...")
+    parkme.call()
+    parkme.channel.start_consuming()
+
+if __name__ == '__main__':
+    try:
+        main()
+    except KeyboardInterrupt:
+        print('Interrupted')
+        try:
+            sys.exit(0)
+        except SystemExit:
+            os._exit(0)

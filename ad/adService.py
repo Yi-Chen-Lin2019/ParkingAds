@@ -2,27 +2,26 @@
 import pika
 import requests
 from bs4 import BeautifulSoup
-import json
 import seqlog
-from pygelf import GelfUdpHandler
 import logging
+import os
 
 connection = pika.BlockingConnection(
-    pika.ConnectionParameters(host='localhost'))
+    pika.ConnectionParameters(host=os.environ["RABBITMQ_HOST"]))
 
 channel = connection.channel()
 
 def getAvailable():
     response = 'some ads'
     try:
-        page = requests.get('http://localhost:83').text
+        page = requests.get(os.environ["ADSERVICE"]).text
         soup = BeautifulSoup(page, "html.parser")
         ad_text = [t.get_text() for t in soup.find_all("div")]
         response = 'Ad: '+ad_text[0]
     except:
         seqlog.log_to_seq(
-        server_url="http://localhost:5341/",
-        api_key="14X7q4Dngg8sBbKa72ZK",
+        server_url=os.environ["SEQ"],
+        api_key=os.environ["SEQ_API_KEY"],
         level=logging.error("Cannot fetch ad from service"))
     return response
 

@@ -1,14 +1,15 @@
 #!/usr/bin/env python
 import pika
 from amadeus import Client, ResponseError
+import os
 
 amadeus = Client(
-    client_id='IGhg5sxWUxzQlck2GqHWkRgbc7aGA4RM',
-    client_secret='h4BFfroouLoPFac3'
+    client_id=os.environ["AMADEUS_CLINET_ID"],
+    client_secret=os.environ["AMADEUS_CLIENT_SECRET"]
 )
 
 connection = pika.BlockingConnection(
-    pika.ConnectionParameters(host='localhost'))
+    pika.ConnectionParameters(host=os.environ["RABBITMQ_HOST"]))
 
 channel = connection.channel()
 
