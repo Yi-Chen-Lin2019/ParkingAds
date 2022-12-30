@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hotel
+  labels:
+    app: hotel
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hotel
+  template:
+    metadata:
+      labels:
+        app: hotel
+    spec:
+      containers:
+        - name: hotel
+          image: kidskids5817/hotelservice:amd
+          env:
+          - name: RABBITMQ_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: rabbitmq-configmap
+                key: rabbitmq-host
+          - name: AMADEUS_CLINET_ID
+            valueFrom:
+              secretKeyRef:
+                name: amadeus-secret
+                key: amadeus-client-id
+          - name: AMADEUS_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: amadeus-secret
+                key: amadeus-client-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hotel-service
+spec:
+  selector:
+    app: hotel
+  ports:
+    - protocol: TCP
+      port: 80
