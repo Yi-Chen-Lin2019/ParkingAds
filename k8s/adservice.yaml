@@ -1,64 +1,23 @@
-# original psuadservice
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: psuadservice
-  labels:
-    app: psuadservice
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: psuadservice
-  template:
-    metadata:
-      labels:
-        app: psuadservice
-    spec:
-      containers:
-        - name: adservice
-          image: kidskids5817/psuadservice
-          ports:
-          - containerPort: 80
-        - name: proxy
-          image: kidskids5817/adproxy:k8s
-          ports:
-          - containerPort: 83
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: psuadservice
-spec:
-  selector:
-    app: psuadservice
-  type: LoadBalancer
-  ports:
-    - protocol: TCP
-      port: 8085
-      targetPort: 83
-      nodePort: 31800
----
 # the adservice receving request from rabbitmq
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: adservice
+  name: ad
   labels:
-    app: adservice
+    app: ad
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: adservice
+      app: ad
   template:
     metadata:
       labels:
-        app: adservice
+        app: ad
     spec:
       containers:
-        - name: adservice
-          image: kidskids5817/adservice:amd
+        - name: ad
+          image: kidskids5817/adservice:test2
           env:
           - name: RABBITMQ_HOST
             valueFrom:
@@ -79,15 +38,15 @@ spec:
             valueFrom:
               configMapKeyRef:
                 name: adservice-configmap
-                key: adservice-proxy
+                key: ad-svc
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: adservice-service
+  name: ad-service
 spec:
   selector:
-    app: adservice
+    app: ad
   ports:
     - protocol: TCP
       port: 80
