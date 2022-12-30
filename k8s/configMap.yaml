@@ -3,4 +3,18 @@ kind: ConfigMap
 metadata:
   name: rabbitmq-configmap
 data:
-    rabbitmq-host: rabbitmq-service
+    rabbitmq-host: hello-world
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: adservice-configmap
+data:
+    adservice-proxy: psuadservice
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: seq-configmap
+data:
+    seq: seq-service

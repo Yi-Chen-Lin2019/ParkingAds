@@ -1,35 +1,38 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: psuparking
+  name: seq
   labels:
-    app: psuparking
+    app: seq
 spec:
-  replicas: 4
+  replicas: 1
   selector:
     matchLabels:
-      app: psuparking
+      app: seq
   template:
     metadata:
       labels:
-        app: psuparking
+        app: seq
     spec:
       containers:
-        - name: psuparking
-          image: kidskids5817/psuparkingservice
+        - name: seq
+          image: datalust/seq:latest
           ports:
           - containerPort: 80
+          env:
+          - name: ACCEPT_EULA
+            value: 'Y'
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: psuparking-service
+  name: seq-service
 spec:
   selector:
-    app: psuparking
+    app: seq
   type: LoadBalancer
   ports:
     - protocol: TCP
-      port: 8083
+      port: 5341
       targetPort: 80
-      nodePort: 31500
+      nodePort: 32000
