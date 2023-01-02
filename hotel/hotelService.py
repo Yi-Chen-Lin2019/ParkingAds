@@ -14,11 +14,14 @@ connection = pika.BlockingConnection(
 channel = connection.channel()
 
 def getAvailable(location):
-    return amadeus.reference_data.locations.hotel.get(keyword=location, subType='HOTEL_LEISURE').data[0:5]
+    try: 
+        return amadeus.reference_data.locations.hotel.get(keyword=location, subType='HOTEL_LEISURE').data[0:5]
+    except:
+        return 'Sorry, hotel service is not available'    
 
 def on_request(ch, method, props, body):
     response = getAvailable(body)
-    print('parking service on request, location: ',body)
+    print('hotel service on request, location: ',body)
 
     ch.basic_publish(exchange='topic_find_parking',
                      routing_key=props.reply_to+'.hotel',
