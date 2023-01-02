@@ -7,7 +7,6 @@ import os
 import requests
 
 ad_address = 'http://'+os.environ["ADSERVICE"]
-print(ad_address)
 
 class ParkingAdsClient():
 
@@ -27,6 +26,7 @@ class ParkingAdsClient():
 
         result = self.channel.queue_declare(queue='', exclusive=True)
         self.callback_queue = result.method.queue
+        print('call back queue: ', self.callback_queue)
 
         self.channel.queue_bind(
             exchange='topic_find_parking', 
@@ -73,6 +73,8 @@ def main():
 if __name__ == '__main__':
     try:
         main()
+        sleep(5)
+        sys.exit(0)
     except KeyboardInterrupt:
         print('Interrupted')
         try:
