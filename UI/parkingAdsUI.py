@@ -40,6 +40,7 @@ class ParkingAdsClient():
             auto_ack=True)
 
         self.corr_id = None
+        self.response = None
 
     def on_response(self, ch, method, props, body):
         if self.corr_id == props.correlation_id:
@@ -58,6 +59,7 @@ class ParkingAdsClient():
             ),
             body=self.message)
         self.connection.process_data_events(time_limit=None)
+        return self.response
 
 def main():
     parkme = ParkingAdsClient()
@@ -68,12 +70,11 @@ def main():
     # get some ads
     print('Ads: ',requests.get(ad_address).text)
 
-    parkme.channel.start_consuming()
+    #parkme.channel.start_consuming()
 
 if __name__ == '__main__':
     try:
         main()
-        sleep(5)
         sys.exit(0)
     except KeyboardInterrupt:
         print('Interrupted')
