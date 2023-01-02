@@ -11,16 +11,17 @@ connection = pika.BlockingConnection(
 
 channel = connection.channel()
 
+ad_address = 'http://'+os.environ["ADSERVICE"]
+seq_address = 'http://'+os.environ["SEQ"]
+
 def getAvailable():
     response = 'some ads'
     try:
-        page = requests.get(os.environ["ADSERVICE"]).text
-        soup = BeautifulSoup(page, "html.parser")
-        ad_text = [t.get_text() for t in soup.find_all("div")]
-        response = 'Ad: '+ad_text[0]
+        page = requests.get(ad_address).text
+        response = page
     except:
         seqlog.log_to_seq(
-        server_url=os.environ["SEQ"],
+        server_url= seq_address,
         api_key=os.environ["SEQ_API_KEY"],
         level=logging.error("Cannot fetch ad from service"))
     return response

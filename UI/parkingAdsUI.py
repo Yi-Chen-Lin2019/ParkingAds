@@ -4,6 +4,10 @@ import pika
 import uuid
 import sys
 import os
+import requests
+
+ad_address = 'http://'+os.environ["ADSERVICE"]
+print(ad_address)
 
 class ParkingAdsClient():
 
@@ -60,6 +64,10 @@ def main():
 
     print(" [x] Requesting parking information...")
     parkme.call()
+
+    # get some ads
+    print('Ads: ',requests.get(ad_address).text)
+
     parkme.channel.start_consuming()
 
 if __name__ == '__main__':
