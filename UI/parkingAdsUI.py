@@ -5,18 +5,18 @@ import uuid
 import sys
 import os
 import requests
+import time
 
 ad_address = 'http://'+os.environ["ADSERVICE"]
 
 class ParkingAdsClient():
 
-    def __init__(self):
+    def __init__(self, input_location: None):
         """
         Get location from user's ip address and
         assign message variable with location
         """
-        location = geocoder.ip('me')
-        self.message = location.json["city"]
+        self.message = input_location
         """
         Send find parking lots request with location to messaging system.
         """
@@ -62,7 +62,12 @@ class ParkingAdsClient():
         return self.response
 
 def main():
-    parkme = ParkingAdsClient()
+    location = 'Paris'
+    try:
+        location = sys.argv[1]
+    except:
+        location = geocoder.ip('me').json["city"]
+    parkme = ParkingAdsClient(location)
 
     print(" [x] Requesting parking information...")
     parkme.call()
@@ -70,11 +75,13 @@ def main():
     # get some ads
     print('Ads: ',requests.get(ad_address).text)
 
-    #parkme.channel.start_consuming()
+    parkme.channel.start_consuming()
 
 if __name__ == '__main__':
     try:
         main()
+        time.sleep(5)
+        print('exiting...')
         sys.exit(0)
     except KeyboardInterrupt:
         print('Interrupted')
